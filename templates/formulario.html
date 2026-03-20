@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Libro de Reclamaciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo empresa" class="logo-empresa">
+        </div>
+
+        <h1>Libro de Reclamaciones</h1>
+
+        <div class="empresa-box">
+            <p><strong>RUC:</strong> 10095322455</p>
+            <p><strong>Razón Social:</strong> CHUMBIAUCA GOMEZ OSCAR ALBERTO</p>
+            <p><strong>Dirección:</strong> LAS BAHIAS S/N INTERIOR 3 SAN BARTOLO - LIMA - PERU</p>
+            <p><strong>Correo:</strong> {{ empresa_email }}</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="nota legal">
+            La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante la autoridad competente.
+        </div>
+
+        <form method="post">
+            <h2>1. Identificación del consumidor reclamante</h2>
+
+            <div class="grid">
+                <div>
+                    <label>Nombres *</label>
+                    <input type="text" name="nombres" required value="{{ form_data.get('nombres', '') }}">
+                </div>
+                <div>
+                    <label>Apellidos *</label>
+                    <input type="text" name="apellidos" required value="{{ form_data.get('apellidos', '') }}">
+                </div>
+
+                <div>
+                    <label>Tipo de documento *</label>
+                    <select name="tipo_doc" required>
+                        <option value="">Seleccione</option>
+                        <option value="DNI" {% if form_data.get('tipo_doc') == 'DNI' %}selected{% endif %}>DNI</option>
+                        <option value="CE" {% if form_data.get('tipo_doc') == 'CE' %}selected{% endif %}>Carné de Extranjería</option>
+                        <option value="Pasaporte" {% if form_data.get('tipo_doc') == 'Pasaporte' %}selected{% endif %}>Pasaporte</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Número de documento *</label>
+                    <input type="text" name="num_doc" required value="{{ form_data.get('num_doc', '') }}">
+                </div>
+
+                <div>
+                    <label>Teléfono *</label>
+                    <input type="text" name="telefono" required value="{{ form_data.get('telefono', '') }}">
+                </div>
+                <div>
+                    <label>Correo de seguimiento del reclamo *</label>
+                    <input type="email" name="email_seguimiento" value="reclamosbodegaoscar@gmail.com" readonly>
+                </div>
+
+                <div class="full">
+                    <label>Dirección *</label>
+                    <input type="text" name="direccion" required value="{{ form_data.get('direccion', '') }}">
+                </div>
+            </div>
+
+            <div class="checks">
+                <label>
+                    <input type="checkbox" name="menor_edad" {% if form_data.get('menor_edad') %}checked{% endif %}>
+                    El consumidor es menor de edad
+                </label>
+            </div>
+
+            <div>
+                <label>Nombre del padre, madre o tutor</label>
+                <input type="text" name="padre_madre_tutor" value="{{ form_data.get('padre_madre_tutor', '') }}">
+            </div>
+
+            <h2>2. Identificación del bien contratado</h2>
+
+            <div class="grid">
+                <div>
+                    <label>Bien contratado *</label>
+                    <select name="bien_contratado" required>
+                        <option value="">Seleccione</option>
+                        <option value="Producto" {% if form_data.get('bien_contratado') == 'Producto' %}selected{% endif %}>Producto</option>
+                        <option value="Servicio" {% if form_data.get('bien_contratado') == 'Servicio' %}selected{% endif %}>Servicio</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Monto reclamado</label>
+                    <input type="number" step="0.01" name="monto_reclamado" value="{{ form_data.get('monto_reclamado', '') }}">
+                </div>
+
+                <div class="full">
+                    <label>Descripción del producto o servicio</label>
+                    <input type="text" name="descripcion_bien" value="{{ form_data.get('descripcion_bien', '') }}">
+                </div>
+            </div>
+
+            <h2>3. Detalle de la reclamación</h2>
+
+            <div class="grid">
+                <div>
+                    <label>Tipo *</label>
+                    <select name="tipo_solicitud" required>
+                        <option value="">Seleccione</option>
+                        <option value="Reclamo" {% if form_data.get('tipo_solicitud') == 'Reclamo' %}selected{% endif %}>Reclamo</option>
+                        <option value="Queja" {% if form_data.get('tipo_solicitud') == 'Queja' %}selected{% endif %}>Queja</option>
+                    </select>
+                </div>
+                <div class="full">
+                    <label>Detalle *</label>
+                    <textarea name="detalle" rows="5" required>{{ form_data.get('detalle', '') }}</textarea>
+                </div>
+                <div class="full">
+                    <label>Pedido del consumidor *</label>
+                    <textarea name="pedido" rows="4" required>{{ form_data.get('pedido', '') }}</textarea>
+                </div>
+            </div>
+
+            <div class="checks">
+                <label>
+                    <input
+                        type="checkbox"
+                        name="acepta_notificacion_email"
+                        id="chk_notificacion_email"
+                        {% if form_data.get('acepta_notificacion_email') %}checked{% endif %}
+                        onchange="toggleCorreoCliente()"
+                    >
+                    Acepto ser notificado por correo electrónico
+                </label>
+            </div>
+            
+            <div>
+                <label>Correo de contacto del cliente</label>
+                <input
+                    type="email"
+                    name="email_cliente"
+                    id="email_cliente"
+                    placeholder="Ingrese su correo solo si desea dejar un medio de contacto"
+                    value="{{ form_data.get('email_cliente', '') }}"
+                    {% if not form_data.get('acepta_notificacion_email') %}disabled{% endif %}
+                >
+            </div>
+
+            <div class="btn-row">
+                <button type="submit">Enviar reclamación</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+function toggleCorreoCliente() {
+    const chk = document.getElementById("chk_notificacion_email");
+    const input = document.getElementById("email_cliente");
+
+    if (chk.checked) {
+        input.disabled = false;
+        input.focus();
+    } else {
+        input.disabled = true;
+        input.value = "";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    toggleCorreoCliente();
+});
+</script>
+</body>
+</html>
