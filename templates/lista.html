@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Lista de reclamos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo empresa" class="logo-empresa">
+        </div>
+
+        <h1>Lista de reclamos</h1>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Ver</th>
+                        <th>PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for r in reclamos %}
+                    <tr>
+                        <td>{{ r["numero"] }}</td>
+                        <td>{{ r["fecha_registro"] }}</td>
+                        <td>{{ r["nombres"] }} {{ r["apellidos"] }}</td>
+                        <td>{{ r["tipo_solicitud"] }}</td>
+                        <td>{{ r["estado"] }}</td>
+                        <td>
+                            <a href="{{ url_for('ver_detalle', numero=r['numero']) }}?token={{ request.args.get('token') }}">Abrir</a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('descargar_pdf', numero=r['numero']) }}">PDF</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
