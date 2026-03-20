@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Detalle del reclamo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo empresa" class="logo-empresa">
+        </div>
+
+        <h1>Detalle del reclamo</h1>
+
+        {% if mensaje %}
+            <div class="alert success-alert">{{ mensaje }}</div>
+        {% endif %}
+
+        <div class="detail-grid">
+            <div><strong>Número:</strong> {{ reclamo["numero"] }}</div>
+            <div><strong>Fecha:</strong> {{ reclamo["fecha_registro"] }}</div>
+            <div><strong>Estado:</strong> {{ reclamo["estado"] }}</div>
+            <div><strong>Tipo:</strong> {{ reclamo["tipo_solicitud"] }}</div>
+            <div><strong>Cliente:</strong> {{ reclamo["nombres"] }} {{ reclamo["apellidos"] }}</div>
+            <div><strong>Documento:</strong> {{ reclamo["tipo_doc"] }} {{ reclamo["num_doc"] }}</div>
+            <div><strong>Teléfono:</strong> {{ reclamo["telefono"] }}</div>
+            <div><strong>Email:</strong> {{ reclamo["email"] }}</div>
+            <div class="full"><strong>Dirección:</strong> {{ reclamo["direccion"] }}</div>
+            <div><strong>Bien contratado:</strong> {{ reclamo["bien_contratado"] }}</div>
+            <div><strong>Monto reclamado:</strong> {{ reclamo["monto_reclamado"] }}</div>
+            <div class="full"><strong>Descripción bien:</strong> {{ reclamo["descripcion_bien"] }}</div>
+            <div class="full"><strong>Detalle:</strong><br>{{ reclamo["detalle"] }}</div>
+            <div class="full"><strong>Pedido:</strong><br>{{ reclamo["pedido"] }}</div>
+        </div>
+
+        {% if reclamo["respuesta"] %}
+            <div class="respuesta-box">
+                <h2>Respuesta registrada</h2>
+                <p><strong>Fecha respuesta:</strong> {{ reclamo["fecha_respuesta"] }}</p>
+                <p>{{ reclamo["respuesta"] }}</p>
+            </div>
+        {% endif %}
+
+        {% if request.args.get('token') %}
+            <div class="respuesta-box">
+                <h2>Responder reclamo</h2>
+                <form method="post" action="{{ url_for('responder_reclamo', numero=reclamo['numero']) }}?token={{ request.args.get('token') }}">
+                    <textarea name="respuesta" rows="6" placeholder="Escribe aquí la respuesta al cliente..."></textarea>
+                    <div class="btn-row">
+                        <button type="submit">Guardar respuesta y enviar correo</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+
+        <div class="actions">
+            <a class="btn" href="{{ url_for('descargar_pdf', numero=reclamo['numero']) }}">Descargar PDF</a>
+            {% if request.args.get('token') %}
+                <a class="btn btn-light" href="{{ url_for('ver_reclamos') }}?token={{ request.args.get('token') }}">Volver a lista</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
