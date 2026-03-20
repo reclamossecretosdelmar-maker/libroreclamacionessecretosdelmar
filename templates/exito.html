@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Reclamo registrado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card center">
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo empresa" class="logo-empresa">
+        </div>
+
+        <h1>Reclamación registrada correctamente</h1>
+
+        <div class="success-box">
+            <p><strong>Número:</strong> {{ reclamo["numero"] }}</p>
+            <p><strong>Fecha:</strong> {{ reclamo["fecha_registro"] }}</p>
+            <p><strong>Estado:</strong> {{ reclamo["estado"] }}</p>
+        </div>
+
+        <div class="mail-box {% if ok_correo %}mail-ok{% else %}mail-error{% endif %}">
+            {{ msg_correo }}
+        </div>
+
+        <div class="actions">
+            <a class="btn" href="{{ url_for('descargar_pdf', numero=reclamo['numero']) }}">Descargar constancia PDF</a>
+            <a class="btn btn-light" href="{{ url_for('libro_reclamaciones') }}">Registrar otro reclamo</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
