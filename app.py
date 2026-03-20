@@ -35,10 +35,10 @@ DB_PATH = BASE_DIR / "libro_reclamaciones.db"
 # =========================================================
 # DATOS EMPRESA
 # =========================================================
-EMPRESA_RUC = "10095322455"
-EMPRESA_RAZON_SOCIAL = "CHUMBIAUCA GOMEZ OSCAR ALBERTO"
-EMPRESA_DIRECCION = "LAS BAHIAS S/N INTERIOR 3 SAN BARTOLO - LIMA - PERU"
-EMPRESA_EMAIL = "reclamosbodegaoscar@gmail.com"
+EMPRESA_RUC = "10433270041"
+EMPRESA_RAZON_SOCIAL = "CHAVEZ CASTILLO YOEL PASCUAL"
+EMPRESA_DIRECCION = "AV. MAR PACIFICO-458 MZ.L LT.21 CASCO URB. SAN BARTOLO"
+EMPRESA_EMAIL = "reclamossecretosdelmar@gmail.com"
 
 
 # =========================================================
